@@ -79,4 +79,6 @@ private:
 
 	QRecursiveMutex m_workersMutex;
 
+	bool m_available{true};
+
 } ;
