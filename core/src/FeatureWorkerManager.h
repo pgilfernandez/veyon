@@ -87,4 +87,6 @@ private:
 	QMutex m_workersMutex{QMutex::Recursive};
 #endif
 
+	bool m_available{true};
+
 } ;
