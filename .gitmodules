@@ -17,3 +17,6 @@
 [submodule "3rdparty/qthttpserver"]
 	path = 3rdparty/qthttpserver
 	url = https://github.com/veyon/qthttpserver.git
+[submodule "3rdparty/osxvnc"]
+	path = 3rdparty/osxvnc
+	url = https://github.com/pgilfernandez/OSXvnc.git
