@@ -242,7 +242,7 @@ bool VncClientProtocol::receiveMessage()
 
 bool VncClientProtocol::readProtocol()
 {
-	if( m_socket->bytesAvailable() == sz_rfbProtocolVersionMsg )
+	if( m_socket->bytesAvailable() >= sz_rfbProtocolVersionMsg )
 	{
 		const auto protocol = m_socket->read( sz_rfbProtocolVersionMsg );
 
