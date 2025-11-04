@@ -53,7 +53,7 @@ If you&apos;re interested in translating Veyon into your local or another langua
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Restrict access to members of specific user groups</source>
+        <source>Process access control rules</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -61,11 +61,11 @@ If you&apos;re interested in translating Veyon into your local or another langua
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Process access control rules</source>
+        <source>Grant access to every authenticated user (default)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Grant access to every authenticated user (default)</source>
+        <source>Restrict access to members of specific user groups</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -215,6 +215,10 @@ If you&apos;re interested in translating Veyon into your local or another langua
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Local computer is already being accessed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Action</source>
         <translation type="unfinished"></translation>
     </message>
@@ -248,10 +252,6 @@ If you&apos;re interested in translating Veyon into your local or another langua
     </message>
     <message>
         <source>Local computer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Local computer is already being accessed</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -298,11 +298,11 @@ If you&apos;re interested in translating Veyon into your local or another langua
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Test result</source>
+        <source>There is no matching rule with a valid action. The access is therefore denied.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>There is no matching rule with a valid action. The access is therefore denied.</source>
+        <source>Test result</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -400,6 +400,12 @@ The public key is used on client computers to authenticate incoming connection r
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Please enter the name of the user group or role for which to import the authentication key.
+
+Make sure that the names of the keys belonging to each other are identical on all computers.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Please select a key to export!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -409,12 +415,6 @@ The public key is used on client computers to authenticate incoming connection r
     </message>
     <message>
         <source>Please select a key which to set the access group for!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Please enter the name of the user group or role for which to import the authentication key.
-
-Make sure that the names of the keys belonging to each other are identical on all computers.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -949,6 +949,10 @@ Make sure that the names of the keys belonging to each other are identical on al
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Location &quot;%1&quot; not found.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Network object directory which stores objects in local configuration</source>
         <translation type="unfinished"></translation>
     </message>
@@ -980,8 +984,11 @@ Make sure that the names of the keys belonging to each other are identical on al
         <source>&quot;Computer 01&quot;</source>
         <translation type="unfinished"></translation>
     </message>
+</context>
+<context>
+    <name>BuiltinMacVncServer</name>
     <message>
-        <source>Location &quot;%1&quot; not found.</source>
+        <source>Builtin VNC server (macOS)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1010,7 +1017,15 @@ Make sure that the names of the keys belonging to each other are identical on al
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Active features: %1</source>
+        <source>Hostname: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>IP address: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1027,6 +1042,10 @@ Make sure that the names of the keys belonging to each other are identical on al
     </message>
     <message>
         <source>Computer offline or switched off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hostname could not be resolved</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1050,23 +1069,11 @@ Make sure that the names of the keys belonging to each other are identical on al
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Hostname: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>unknown</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>IP address: %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Hostname could not be resolved</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>No features active</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Active features: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1257,6 +1264,10 @@ Make sure that the names of the keys belonging to each other are identical on al
 <context>
     <name>ConfigurationManager</name>
     <message>
+        <source>Could not apply platform-specific configuration settings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Could not modify the autostart property for the %1 Service.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1266,10 +1277,6 @@ Make sure that the names of the keys belonging to each other are identical on al
     </message>
     <message>
         <source>Could not configure the firewall configuration for the %1 Worker.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Could not apply platform-specific configuration settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1846,6 +1853,18 @@ Make sure that the names of the keys belonging to each other are identical on al
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Color scheme:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Light</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Authentication</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1879,6 +1898,14 @@ Make sure that the names of the keys belonging to each other are identical on al
     </message>
     <message>
         <source> seconds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>User groups</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Include user groups from domain</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1946,6 +1973,14 @@ Make sure that the names of the keys belonging to each other are identical on al
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Missing user groups backend</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No user groups plugin was found. Please check your installation!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Authentication is set up properly on this computer.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1979,34 +2014,6 @@ Make sure that the names of the keys belonging to each other are identical on al
     </message>
     <message>
         <source>Authentication test</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>User groups</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Include user groups from domain</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Missing user groups backend</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No user groups plugin was found. Please check your installation!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Color scheme:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Light</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Dark</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2287,6 +2294,10 @@ Make sure that the names of the keys belonging to each other are identical on al
     </message>
     <message>
         <source>Query nested user groups (supported by AD only)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Map container/OU structure 1:1 to locations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2672,10 +2683,6 @@ Make sure that the names of the keys belonging to each other are identical on al
         <source>%1 %2 have been queried successfully using the configured filter.</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Map container/OU structure 1:1 to locations</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>LdapPlugin</name>
@@ -2770,6 +2777,33 @@ Make sure that the names of the keys belonging to each other are identical on al
     </message>
     <message>
         <source>enter search filter...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>MacVncConfigurationWidget</name>
+    <message>
+        <source>MacVNC server configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View only (disable remote control)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Prevent display dimming</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Prevent system sleep</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Display index</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Primary display</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2895,6 +2929,12 @@ Make sure that the names of the keys belonging to each other are identical on al
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Use custom computer arrangement.
+
+Press and hold to load arrangement from a file or save current arrangement to a file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Only show powered on computers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2927,6 +2967,10 @@ Make sure that the names of the keys belonging to each other are identical on al
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>%1 Configurator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Load settings from file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2936,10 +2980,6 @@ Make sure that the names of the keys belonging to each other are identical on al
     </message>
     <message>
         <source>Do you really want to reset the local configuration and revert all settings to their defaults?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>%1 Configurator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2963,7 +3003,19 @@ Make sure that the names of the keys belonging to each other are identical on al
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>The local configuration backend reported that the configuration is not writable! The %1 Configurator will run in read-only mode.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>The local configuration backend reported that the configuration is not writable! Please run the %1 Configurator with higher privileges.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load computer positions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save computer positions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2990,20 +3042,6 @@ Make sure that the names of the keys belonging to each other are identical on al
         <source>The feature &quot;%1&quot; is still active. Please stop it before closing %2.</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Use custom computer arrangement.
-
-Press and hold to load arrangement from a file or save current arrangement to a file.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Load computer positions</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Save computer positions</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>MasterConfigurationPage</name>
@@ -3016,11 +3054,15 @@ Press and hold to load arrangement from a file or save current arrangement to a 
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Screenshots</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>User configuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Screenshots</source>
+        <source>Configuration templates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3064,11 +3106,11 @@ Press and hold to load arrangement from a file or save current arrangement to a 
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Only last part of user name</source>
+        <source>Only computer name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Only computer name</source>
+        <source>Only last part of user name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3113,6 +3155,54 @@ Press and hold to load arrangement from a file or save current arrangement to a 
     </message>
     <message>
         <source>Remote access image quality</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Advanced</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Computer name source</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Host address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Session client address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Session client name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Session host name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Session metadata</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Full name of user</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>User login name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Computer UID role</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Session meta data hash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3168,6 +3258,10 @@ Press and hold to load arrangement from a file or save current arrangement to a 
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Always expand all locations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Modes and features</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3205,62 +3299,6 @@ Press and hold to load arrangement from a file or save current arrangement to a 
     </message>
     <message>
         <source>&lt;no feature&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Always expand all locations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Configuration templates</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Advanced</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Computer name source</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Host address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Session client address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Session client name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Session host name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Session metadata</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Full name of user</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>User login name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Computer UID role</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Session meta data hash</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3322,6 +3360,13 @@ Press and hold to load arrangement from a file or save current arrangement to a 
     </message>
     <message>
         <source>Name:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>OsXPlatformPlugin</name>
+    <message>
+        <source>Plugin implementing abstract functions for the macOS platform</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3830,12 +3875,16 @@ Please save your work and close all programs.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Enabling this option will make the service launch a server process for every interactive session on a computer.
-Typically this is required to support terminal servers.</source>
+        <source>Enable if a single Veyon Server instance should be launched for the currently active session, no matter if local or remote.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Active session mode (single server instance for active local or remote session)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enabling this option will make the service launch a server process for every interactive session on a computer.
+Typically this is required to support terminal servers.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3851,7 +3900,7 @@ Typically this is required to support terminal servers.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Veyon server</source>
+        <source>Demo server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3859,11 +3908,11 @@ Typically this is required to support terminal servers.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Feature manager</source>
+        <source>Veyon server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Demo server</source>
+        <source>Feature manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3891,18 +3940,6 @@ Typically this is required to support terminal servers.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Restart %1 Service</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>All settings were saved successfully. In order to take effect the %1 service needs to be restarted. Restart it now?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Running</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Session metadata</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3923,16 +3960,6 @@ Typically this is required to support terminal servers.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Optionally enter a regular expression with a capture to extract a part of the computer name and use it as the display name for the computer.
-
-Example: [^-]*-(PC[0-9]*)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Enable if a single Veyon Server instance should be launched for the currently active session, no matter if local or remote.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Environment variable name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3940,13 +3967,27 @@ Example: [^-]*-(PC[0-9]*)</source>
         <source>Registry key name</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Optionally enter a regular expression with a capture to extract a part of the computer name and use it as the display name for the computer.
+
+Example: [^-]*-(PC[0-9]*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Restart %1 Service</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All settings were saved successfully. In order to take effect the %1 service needs to be restarted. Restart it now?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Running</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ServiceControl</name>
-    <message>
-        <source>Service control</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>Starting %1</source>
         <translation type="unfinished"></translation>
@@ -3965,6 +4006,10 @@ Example: [^-]*-(PC[0-9]*)</source>
     </message>
     <message>
         <source>Unregistering %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Service control</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4460,6 +4505,26 @@ Example: [^-]*-(PC[0-9]*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Handling of interfering windows</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fix window attributes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Terminate related process</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Close session</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>User authentication</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4505,26 +4570,6 @@ Example: [^-]*-(PC[0-9]*)</source>
     </message>
     <message>
         <source>Use custom power scheme with disabled power button</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Handling of interfering windows</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Fix window attributes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Terminate related process</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Close session</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
