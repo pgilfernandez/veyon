@@ -23,6 +23,10 @@ build_veyon_application(veyon-server
 	src/VncServer.h)
 
 if(APPLE)
+	set_target_properties(veyon-server PROPERTIES
+		MACOSX_BUNDLE_INFO_PLIST "${CMAKE_SOURCE_DIR}/server/MacOSXBundleInfo.veyon-server.plist.in"
+	)
+
 	set(_veyon_macos_helpers
 		veyon-service
 		veyon-worker
