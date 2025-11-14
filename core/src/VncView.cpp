@@ -277,6 +277,7 @@ void VncView::updateCursorShape( const QPixmap& cursorShape, int xh, int yh )
 void VncView::updateFramebufferSize( int w, int h )
 {
 	m_framebufferSize = QSize( w, h );
+	m_framebufferReady = false;
 
 	updateGeometry();
 }
@@ -285,12 +286,45 @@ void VncView::updateFramebufferSize( int w, int h )
 
 void VncView::updateImage( int x, int y, int w, int h )
 {
+	if( connection()->hasValidFramebuffer() == false )
+	{
+		return;
+	}
+
 	x -= viewport().x();
 	y -= viewport().y();
 
 	const auto scale = scaleFactor();
 	updateView( qMax( 0, qFloor( x*scale - 1 ) ), qMax( 0, qFloor( y*scale - 1 ) ),
 				qCeil( w*scale + 2 ), qCeil( h*scale + 2 ) );
+}
+
+
+
+void VncView::handleFramebufferUpdateComplete()
+{
+	if( connection()->hasValidFramebuffer() == false )
+	{
+		return;
+	}
+
+	if( m_framebufferReady )
+	{
+		return;
+	}
+
+	m_framebufferReady = true;
+	updateView( 0, 0, viewSize().width(), viewSize().height() );
+}
+
+
+
+void VncView::handleConnectionStateChanged()
+{
+	if( connection()->state() != VncConnection::State::Connected )
+	{
+		m_framebufferReady = false;
+	}
 }
 
 
