@@ -97,6 +97,10 @@ protected:
 
 		QObject::connect( connection(), &VncConnection::cursorShapeUpdated, object,
 						  [this]( const QPixmap& cursorShape, int xh, int yh ) { updateCursorShape( cursorShape, xh, yh ); } );
+		QObject::connect( connection(), &VncConnection::framebufferUpdateComplete, object,
+						  [this]() { handleFramebufferUpdateComplete(); } );
+		QObject::connect( connection(), &VncConnection::stateChanged, object,
+						  [this]() { handleConnectionStateChanged(); } );
 	}
 
 	virtual void updateView( int x, int y, int w, int h ) = 0;
@@ -107,6 +111,8 @@ protected:
 	void updateCursorShape( const QPixmap& cursorShape, int xh, int yh );
 	void updateFramebufferSize( int w, int h );
 	void updateImage( int x, int y, int w, int h );
+	void handleFramebufferUpdateComplete();
+	void handleConnectionStateChanged();
 
 	void unpressModifiers();
 
@@ -143,6 +149,7 @@ private:
 	QPoint m_cursorHot{0, 0};
 	QSize m_framebufferSize{0, 0};
 	bool m_viewOnly{true};
+	bool m_framebufferReady{false};
 
 	QRect m_viewport{};
 
