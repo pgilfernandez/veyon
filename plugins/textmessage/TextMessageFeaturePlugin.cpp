@@ -30,6 +30,8 @@
 #include "ComputerControlInterface.h"
 #include "VeyonMasterInterface.h"
 #include "VeyonServerInterface.h"
+#include "VeyonCore.h"
+#include "PlatformCoreFunctions.h"
 
 
 TextMessageFeaturePlugin::TextMessageFeaturePlugin( QObject* parent ) :
@@ -133,19 +135,39 @@ bool TextMessageFeaturePlugin::handleFeatureMessage( VeyonWorkerInterface& worke
 {
 	Q_UNUSED(worker);
 
+	qDebug() << "TextMessageFeaturePlugin::handleFeatureMessage called with featureUid:" << message.featureUid();
+	qDebug() << "Expected featureUid:" << m_textMessageFeature.uid();
+
 	if( message.featureUid() == m_textMessageFeature.uid() )
 	{
-		auto messageBox = new QMessageBox( static_cast<QMessageBox::Icon>( message.argument( Argument::Icon ).toInt() ),
-										   tr( "Message from teacher" ),
-										   message.argument( Argument::Text ).toString() );
-		messageBox->setTextFormat( Qt::RichText );
-		messageBox->setTextInteractionFlags( Qt::TextBrowserInteraction | Qt::TextSelectableByKeyboard );
-		messageBox->show();
+		qDebug() << "Creating message box with text:" << message.argument( Argument::Text ).toString();
 
-		connect( messageBox, &QMessageBox::accepted, messageBox, &QMessageBox::deleteLater );
+		QMessageBox messageBox( static_cast<QMessageBox::Icon>( message.argument( Argument::Icon ).toInt() ),
+								tr( "Message from teacher" ),
+								message.argument( Argument::Text ).toString() );
+		messageBox.setTextFormat( Qt::RichText );
+		messageBox.setTextInteractionFlags( Qt::TextBrowserInteraction | Qt::TextSelectableByKeyboard );
+
+		// Increase font size to double the default size for better visibility
+		QFont font = messageBox.font();
+		font.setPointSize( 24 );
+		messageBox.setFont( font );
+
+		qDebug() << "Showing message box...";
+		messageBox.show();
+
+		qDebug() << "Calling raiseWindow...";
+		// Ensure the window is brought to the front on all platforms, especially macOS
+		VeyonCore::platform().coreFunctions().raiseWindow( &messageBox, true );
+
+		qDebug() << "Executing message box (modal)...";
+		messageBox.exec();
+
+		qDebug() << "Message box closed";
 
 		return true;
 	}
 
+	qDebug() << "Feature UID did not match, returning false";
 	return true;
 }
