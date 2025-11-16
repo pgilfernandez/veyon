@@ -23,6 +23,7 @@
  */
 
 #include <QMessageBox>
+#include <QTextDocument>
 
 #include "TextMessageFeaturePlugin.h"
 #include "TextMessageDialog.h"
@@ -32,6 +33,33 @@
 #include "VeyonServerInterface.h"
 #include "VeyonCore.h"
 #include "PlatformCoreFunctions.h"
+
+namespace {
+
+QString makeLargeFontHtml( const QString& originalText )
+{
+	static const auto styleStart = QStringLiteral( "<div style=\"font-size: 18px;\">" );
+	static const auto styleEnd = QStringLiteral( "</div>" );
+
+	QString plainText = originalText;
+
+	const auto trimmedText = originalText.trimmed();
+	if( trimmedText.startsWith( QLatin1Char( '<' ) ) )
+	{
+		QTextDocument doc;
+		doc.setHtml( originalText );
+		plainText = doc.toPlainText();
+	}
+
+	QString html;
+	html.reserve( plainText.size() + 64 );
+	html += styleStart;
+	html += plainText.toHtmlEscaped();
+	html += styleEnd;
+	return html;
+}
+
+}
 
 
 TextMessageFeaturePlugin::TextMessageFeaturePlugin( QObject* parent ) :
@@ -142,16 +170,13 @@ bool TextMessageFeaturePlugin::handleFeatureMessage( VeyonWorkerInterface& worke
 	{
 		qDebug() << "Creating message box with text:" << message.argument( Argument::Text ).toString();
 
+		const auto messageText = makeLargeFontHtml( message.argument( Argument::Text ).toString() );
 		QMessageBox messageBox( static_cast<QMessageBox::Icon>( message.argument( Argument::Icon ).toInt() ),
 								tr( "Message from teacher" ),
-								message.argument( Argument::Text ).toString() );
+								QString() );
 		messageBox.setTextFormat( Qt::RichText );
 		messageBox.setTextInteractionFlags( Qt::TextBrowserInteraction | Qt::TextSelectableByKeyboard );
-
-		// Increase font size to double the default size for better visibility
-		QFont font = messageBox.font();
-		font.setPointSize( 24 );
-		messageBox.setFont( font );
+		messageBox.setText( messageText );
 
 		qDebug() << "Showing message box...";
 		messageBox.show();
