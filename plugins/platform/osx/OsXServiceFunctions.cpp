@@ -44,6 +44,25 @@ constexpr auto DefaultServerExecutable = "/Applications/Veyon/veyon-server.app/C
 // Paths for LaunchAgent installation (matching launchAgents.sh script)
 constexpr auto SourceScriptsDirectory = "/Applications/Veyon/veyon-configurator.app/Contents/Resources/Scripts";
 
+QString bundledScriptsDirectory()
+{
+	const auto appResources =
+			QDir(QCoreApplication::applicationDirPath())
+				.absoluteFilePath(QStringLiteral("../Resources/Scripts"));
+
+	if (QDir(appResources).exists())
+	{
+		return QDir(appResources).absolutePath();
+	}
+
+	if (QDir(QString::fromLatin1(SourceScriptsDirectory)).exists())
+	{
+		return QString::fromLatin1(SourceScriptsDirectory);
+	}
+
+	return {};
+}
+
 QString userLaunchAgentPath()
 {
 	return QDir::homePath() + QStringLiteral("/Library/LaunchAgents/") + QString::fromLatin1(LaunchAgentFileName);
@@ -51,7 +70,14 @@ QString userLaunchAgentPath()
 
 QString sourcePlistPath()
 {
-	return QString::fromLatin1(SourceScriptsDirectory) + QLatin1Char('/') + QString::fromLatin1(LaunchAgentFileName);
+	const auto scriptsDir = bundledScriptsDirectory();
+
+	if (scriptsDir.isEmpty())
+	{
+		return {};
+	}
+
+	return scriptsDir + QLatin1Char('/') + QString::fromLatin1(LaunchAgentFileName);
 }
 
 // NOTE: Script and helper resolution functions removed - no longer needed
@@ -235,6 +261,12 @@ bool installUserLaunchAgent()
 
 	// Ensure source plist exists
 	const auto sourcePlist = sourcePlistPath();
+	if (sourcePlist.isEmpty())
+	{
+		vWarning() << "OsXServiceFunctions: could not resolve Scripts directory inside bundle";
+		return false;
+	}
+
 	if (!QFile::exists(sourcePlist))
 	{
 		vWarning() << "OsXServiceFunctions: source plist not found at" << sourcePlist;
