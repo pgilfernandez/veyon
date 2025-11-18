@@ -38,7 +38,7 @@ namespace {
 
 QString makeLargeFontHtml( const QString& originalText )
 {
-	static const auto styleStart = QStringLiteral( "<div style=\"font-size: 18px;\">" );
+	static const auto styleStart = QStringLiteral( "<div style=\"font-size: 16px;\">" );
 	static const auto styleEnd = QStringLiteral( "</div>" );
 
 	QString plainText = originalText;
