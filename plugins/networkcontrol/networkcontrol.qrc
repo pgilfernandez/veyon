@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/networkcontrol" >
+        <file>network-disabled.png</file>
+        <file>network-enabled.png</file>
+    </qresource>
+</RCC>
