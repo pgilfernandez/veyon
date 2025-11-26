@@ -6,3 +6,11 @@ plugins/addons
 plugins/extra
 build_networkcontrol_*/
 veyon-*-distribution/
+.qmake.stash
+moc_predefs.h
+*.o
+moc_*.cpp
+qrc_*.cpp
+*.dylib
+*.so
+*.dll
