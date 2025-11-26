@@ -5,8 +5,9 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BUILD_DIR="/Users/pablo/GitHub/veyon/build_networkcontrol"
-DIST_DIR="/Users/pablo/GitHub/veyon/veyon-macos-distribution"
+VEYON_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+BUILD_DIR="$VEYON_ROOT/build_networkcontrol"
+DIST_DIR="$VEYON_ROOT/veyon-macos-distribution"
 PLUGIN_NAME="networkcontrol"
 VERSION="1.3.0"
 

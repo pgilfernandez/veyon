@@ -47,16 +47,14 @@ Este plugin soporta tres plataformas: **macOS**, **Linux**, y **Windows**. Cada 
 #### Build Automático (Recomendado)
 
 ```bash
-cd /Users/pablo/GitHub/veyon/plugins/networkcontrol
+cd plugins/networkcontrol
 ./macos-build-and-package.sh
 ```
 
 El script automáticamente:
 - Compila el plugin usando qmake + make
-- Crea dos paquetes `.pkg`:
-  - `VeyonNetworkControl-v2.0.0.pkg` (Master + Server)
-  - `VeyonNetworkControl-only-server-v2.0.0.pkg` (Solo Server)
-- Los coloca en `/Users/pablo/GitHub/veyon/veyon-macos-distribution/`
+- Crea paquetes `.pkg` con opciones de instalación personalizables
+- Los coloca en `veyon-macos-distribution/` (en la raíz del repositorio)
 
 #### Requisitos
 - Qt5 (`/usr/local/opt/qt@5`)
@@ -66,7 +64,7 @@ El script automáticamente:
 #### Build Manual
 
 ```bash
-cd /Users/pablo/GitHub/veyon/plugins/networkcontrol
+cd plugins/networkcontrol
 
 # Generar Makefile y compilar
 /usr/local/opt/qt@5/bin/qmake networkcontrol.pro
@@ -99,7 +97,7 @@ sudo installer -pkg VeyonNetworkControl-v2.0.0.pkg -target /
 #### Build Automático (Recomendado)
 
 ```bash
-cd /Users/pablo/GitHub/veyon/plugins/networkcontrol
+cd plugins/networkcontrol
 ./linux-build-and-package.sh
 ```
 
@@ -108,7 +106,7 @@ El script automáticamente:
 - Detecta la versión de Qt (Qt5 o Qt6)
 - Compila el plugin usando CMake + Ninja
 - Crea el paquete apropiado (`.deb` o `.rpm`)
-- Lo coloca en `/Users/pablo/GitHub/veyon/veyon-linux-distribution/`
+- Lo coloca en `veyon-linux-distribution/` (en la raíz del repositorio)
 
 #### Requisitos
 
@@ -131,7 +129,7 @@ sudo dnf install qt6-qtbase-devel qca-qt6-devel    # Qt6
 #### Build Manual
 
 ```bash
-cd /Users/pablo/GitHub/veyon
+# Desde la raíz del repositorio de Veyon
 mkdir build && cd build
 
 # Configurar con CMake
@@ -179,7 +177,7 @@ Este es el método más confiable para crear instaladores de Windows:
 sudo apt-get install cmake ninja-build mingw-w64 nsis
 
 # 2. Compilar y empaquetar
-cd /ruta/a/veyon/plugins/networkcontrol
+cd plugins/networkcontrol
 ./windows-cross-compile-and-package.sh x86_64  # Para Windows 64-bit
 
 # El instalador estará en:
@@ -193,7 +191,7 @@ cd /ruta/a/veyon/plugins/networkcontrol
 sudo dnf install cmake ninja-build mingw64-gcc mingw64-gcc-c++ nsis
 
 # 2. Compilar y empaquetar
-cd /ruta/a/veyon/plugins/networkcontrol
+cd plugins/networkcontrol
 ./windows-cross-compile-and-package.sh x86_64
 ```
 
@@ -225,7 +223,7 @@ REM 1. Descargar e instalar NSIS desde https://nsis.sourceforge.io/
 REM 2. Colocar networkcontrol.dll en el directorio del plugin
 
 REM 3. Ejecutar el build script
-cd C:\ruta\a\veyon\plugins\networkcontrol
+cd plugins\networkcontrol
 windows-build-installer.bat
 
 REM El instalador se creará como:
