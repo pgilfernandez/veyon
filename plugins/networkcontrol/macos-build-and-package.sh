@@ -68,6 +68,7 @@ PKG_BUILD="$BUILD_DIR/package-build"
 rm -rf "$PKG_BUILD"
 mkdir -p "$PKG_BUILD/payload/Applications/Veyon/veyon-master.app/Contents/lib/veyon"
 mkdir -p "$PKG_BUILD/payload/Applications/Veyon/veyon-server.app/Contents/lib/veyon"
+mkdir -p "$PKG_BUILD/payload/Applications/Veyon/veyon-configurator.app/Contents/lib/veyon"
 mkdir -p "$PKG_BUILD/payload/usr/local/bin"
 mkdir -p "$PKG_BUILD/payload/etc/sudoers.d"
 mkdir -p "$PKG_BUILD/scripts"
@@ -76,6 +77,7 @@ mkdir -p "$PKG_BUILD/scripts"
 echo "→ Copying files to package..."
 cp ${PLUGIN_NAME}.dylib "$PKG_BUILD/payload/Applications/Veyon/veyon-master.app/Contents/lib/veyon/"
 cp ${PLUGIN_NAME}.dylib "$PKG_BUILD/payload/Applications/Veyon/veyon-server.app/Contents/lib/veyon/"
+cp ${PLUGIN_NAME}.dylib "$PKG_BUILD/payload/Applications/Veyon/veyon-configurator.app/Contents/lib/veyon/"
 cp veyon-network-helper.sh "$PKG_BUILD/payload/usr/local/bin/veyon-network-helper"
 cp veyon-network-control-sudoers "$PKG_BUILD/payload/etc/sudoers.d/veyon-network-control"
 
@@ -86,12 +88,16 @@ cat > "$PKG_BUILD/scripts/postinstall" <<'POSTINSTALL'
 set -e
 chmod 755 /Applications/Veyon/veyon-master.app/Contents/lib/veyon/networkcontrol.dylib
 chmod 755 /Applications/Veyon/veyon-server.app/Contents/lib/veyon/networkcontrol.dylib
+chmod 755 /Applications/Veyon/veyon-configurator.app/Contents/lib/veyon/networkcontrol.dylib
 chmod 755 /usr/local/bin/veyon-network-helper
 chmod 440 /etc/sudoers.d/veyon-network-control
 chown root:wheel /etc/sudoers.d/veyon-network-control
 visudo -c -f /etc/sudoers.d/veyon-network-control >/dev/null 2>&1 || rm -f /etc/sudoers.d/veyon-network-control
 if pgrep -x "veyon-master" > /dev/null; then
     echo "⚠️  Veyon Master is running. Please restart it to load the new plugin."
+fi
+if pgrep -x "veyon-configurator" > /dev/null; then
+    echo "⚠️  Veyon Configurator is running. Please restart it to load the new plugin."
 fi
 exit 0
 POSTINSTALL
