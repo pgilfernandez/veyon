@@ -62,110 +62,200 @@ echo ""
 echo "→ Moving build artifacts to ${BUILD_DIR}..."
 mv *.o moc_* qrc_* Makefile .qmake.stash "$BUILD_DIR/" 2>/dev/null || true
 
-# Step 7: Create package structure
-echo "→ Creating package structure..."
-PKG_BUILD="$BUILD_DIR/package-build"
-rm -rf "$PKG_BUILD"
-mkdir -p "$PKG_BUILD/payload/Applications/Veyon/veyon-master.app/Contents/lib/veyon"
-mkdir -p "$PKG_BUILD/payload/Applications/Veyon/veyon-server.app/Contents/lib/veyon"
-mkdir -p "$PKG_BUILD/payload/Applications/Veyon/veyon-configurator.app/Contents/lib/veyon"
-mkdir -p "$PKG_BUILD/payload/usr/local/bin"
-mkdir -p "$PKG_BUILD/payload/etc/sudoers.d"
-mkdir -p "$PKG_BUILD/scripts"
+# Step 7: Create component packages (Core, Master, Server, Configurator)
+echo "→ Creating component package structures..."
 
-# Step 8: Copy files to package
-echo "→ Copying files to package..."
-cp ${PLUGIN_NAME}.dylib "$PKG_BUILD/payload/Applications/Veyon/veyon-master.app/Contents/lib/veyon/"
-cp ${PLUGIN_NAME}.dylib "$PKG_BUILD/payload/Applications/Veyon/veyon-server.app/Contents/lib/veyon/"
-cp ${PLUGIN_NAME}.dylib "$PKG_BUILD/payload/Applications/Veyon/veyon-configurator.app/Contents/lib/veyon/"
-cp veyon-network-helper.sh "$PKG_BUILD/payload/usr/local/bin/veyon-network-helper"
-cp veyon-network-control-sudoers "$PKG_BUILD/payload/etc/sudoers.d/veyon-network-control"
+# Component 1: Core (helper script + sudoers) - REQUIRED
+PKG_CORE="$BUILD_DIR/package-core"
+rm -rf "$PKG_CORE"
+mkdir -p "$PKG_CORE/payload/usr/local/bin"
+mkdir -p "$PKG_CORE/payload/etc/sudoers.d"
+mkdir -p "$PKG_CORE/scripts"
 
-# Step 9: Create postinstall script
-echo "→ Creating postinstall script..."
-cat > "$PKG_BUILD/scripts/postinstall" <<'POSTINSTALL'
+cp veyon-network-helper.sh "$PKG_CORE/payload/usr/local/bin/veyon-network-helper"
+cp veyon-network-control-sudoers "$PKG_CORE/payload/etc/sudoers.d/veyon-network-control"
+
+cat > "$PKG_CORE/scripts/postinstall" <<'POSTINSTALL_CORE'
+#!/bin/bash
+set -e
+chmod 755 /usr/local/bin/veyon-network-helper
+chmod 440 /etc/sudoers.d/veyon-network-control
+chown root:wheel /etc/sudoers.d/veyon-network-control
+visudo -c -f /etc/sudoers.d/veyon-network-control >/dev/null 2>&1 || rm -f /etc/sudoers.d/veyon-network-control
+exit 0
+POSTINSTALL_CORE
+chmod +x "$PKG_CORE/scripts/postinstall"
+
+# Component 2: Master - OPTIONAL
+PKG_MASTER="$BUILD_DIR/package-master"
+rm -rf "$PKG_MASTER"
+mkdir -p "$PKG_MASTER/payload/Applications/Veyon/veyon-master.app/Contents/lib/veyon"
+mkdir -p "$PKG_MASTER/scripts"
+
+cp ${PLUGIN_NAME}.dylib "$PKG_MASTER/payload/Applications/Veyon/veyon-master.app/Contents/lib/veyon/"
+
+cat > "$PKG_MASTER/scripts/postinstall" <<'POSTINSTALL_MASTER'
 #!/bin/bash
 set -e
 chmod 755 /Applications/Veyon/veyon-master.app/Contents/lib/veyon/networkcontrol.dylib
-chmod 755 /Applications/Veyon/veyon-server.app/Contents/lib/veyon/networkcontrol.dylib
-chmod 755 /Applications/Veyon/veyon-configurator.app/Contents/lib/veyon/networkcontrol.dylib
-chmod 755 /usr/local/bin/veyon-network-helper
-chmod 440 /etc/sudoers.d/veyon-network-control
-chown root:wheel /etc/sudoers.d/veyon-network-control
-visudo -c -f /etc/sudoers.d/veyon-network-control >/dev/null 2>&1 || rm -f /etc/sudoers.d/veyon-network-control
 if pgrep -x "veyon-master" > /dev/null; then
     echo "⚠️  Veyon Master is running. Please restart it to load the new plugin."
 fi
-if pgrep -x "veyon-configurator" > /dev/null; then
-    echo "⚠️  Veyon Configurator is running. Please restart it to load the new plugin."
-fi
 exit 0
-POSTINSTALL
+POSTINSTALL_MASTER
+chmod +x "$PKG_MASTER/scripts/postinstall"
 
-chmod +x "$PKG_BUILD/scripts/postinstall"
+# Component 3: Server - OPTIONAL
+PKG_SERVER="$BUILD_DIR/package-server"
+rm -rf "$PKG_SERVER"
+mkdir -p "$PKG_SERVER/payload/Applications/Veyon/veyon-server.app/Contents/lib/veyon"
+mkdir -p "$PKG_SERVER/scripts"
 
-# Step 10: Build package
-echo "→ Building .pkg installer..."
-PKG_FILE="VeyonNetworkControl-v${VERSION}.pkg"
-pkgbuild --root "$PKG_BUILD/payload" \
-         --scripts "$PKG_BUILD/scripts" \
-         --identifier io.veyon.networkcontrol \
-         --version "$VERSION" \
-         --install-location / \
-         "$BUILD_DIR/$PKG_FILE"
+cp ${PLUGIN_NAME}.dylib "$PKG_SERVER/payload/Applications/Veyon/veyon-server.app/Contents/lib/veyon/"
 
-# Step 11: Move to distribution
-echo "→ Moving package to distribution directory..."
-mkdir -p "$DIST_DIR"
-mv "$BUILD_DIR/$PKG_FILE" "$DIST_DIR/"
-
-# Step 12: Create server-only package structure
-echo ""
-echo "→ Creating server-only package structure..."
-PKG_BUILD_SERVER="$BUILD_DIR/package-build-server-only"
-rm -rf "$PKG_BUILD_SERVER"
-mkdir -p "$PKG_BUILD_SERVER/payload/Applications/Veyon/veyon-server.app/Contents/lib/veyon"
-mkdir -p "$PKG_BUILD_SERVER/payload/usr/local/bin"
-mkdir -p "$PKG_BUILD_SERVER/payload/etc/sudoers.d"
-mkdir -p "$PKG_BUILD_SERVER/scripts"
-
-# Step 13: Copy files to server-only package
-echo "→ Copying files to server-only package..."
-cp ${PLUGIN_NAME}.dylib "$PKG_BUILD_SERVER/payload/Applications/Veyon/veyon-server.app/Contents/lib/veyon/"
-cp veyon-network-helper.sh "$PKG_BUILD_SERVER/payload/usr/local/bin/veyon-network-helper"
-cp veyon-network-control-sudoers "$PKG_BUILD_SERVER/payload/etc/sudoers.d/veyon-network-control"
-
-# Step 14: Create server-only postinstall script
-echo "→ Creating server-only postinstall script..."
-cat > "$PKG_BUILD_SERVER/scripts/postinstall" <<'POSTINSTALL_SERVER'
+cat > "$PKG_SERVER/scripts/postinstall" <<'POSTINSTALL_SERVER'
 #!/bin/bash
 set -e
 chmod 755 /Applications/Veyon/veyon-server.app/Contents/lib/veyon/networkcontrol.dylib
-chmod 755 /usr/local/bin/veyon-network-helper
-chmod 440 /etc/sudoers.d/veyon-network-control
-chown root:wheel /etc/sudoers.d/veyon-network-control
-visudo -c -f /etc/sudoers.d/veyon-network-control >/dev/null 2>&1 || rm -f /etc/sudoers.d/veyon-network-control
 if pgrep -x "veyon-server" > /dev/null; then
     echo "⚠️  Veyon Server is running. Please restart it to load the new plugin."
 fi
 exit 0
 POSTINSTALL_SERVER
+chmod +x "$PKG_SERVER/scripts/postinstall"
 
-chmod +x "$PKG_BUILD_SERVER/scripts/postinstall"
+# Component 4: Configurator - OPTIONAL
+PKG_CONFIGURATOR="$BUILD_DIR/package-configurator"
+rm -rf "$PKG_CONFIGURATOR"
+mkdir -p "$PKG_CONFIGURATOR/payload/Applications/Veyon/veyon-configurator.app/Contents/lib/veyon"
+mkdir -p "$PKG_CONFIGURATOR/scripts"
 
-# Step 15: Build server-only package
-echo "→ Building server-only .pkg installer..."
-PKG_FILE_SERVER="VeyonNetworkControl-only-server-v${VERSION}.pkg"
-pkgbuild --root "$PKG_BUILD_SERVER/payload" \
-         --scripts "$PKG_BUILD_SERVER/scripts" \
-         --identifier io.veyon.networkcontrol.serveronly \
+cp ${PLUGIN_NAME}.dylib "$PKG_CONFIGURATOR/payload/Applications/Veyon/veyon-configurator.app/Contents/lib/veyon/"
+
+cat > "$PKG_CONFIGURATOR/scripts/postinstall" <<'POSTINSTALL_CONFIGURATOR'
+#!/bin/bash
+set -e
+chmod 755 /Applications/Veyon/veyon-configurator.app/Contents/lib/veyon/networkcontrol.dylib
+if pgrep -x "veyon-configurator" > /dev/null; then
+    echo "⚠️  Veyon Configurator is running. Please restart it to load the new plugin."
+fi
+exit 0
+POSTINSTALL_CONFIGURATOR
+chmod +x "$PKG_CONFIGURATOR/scripts/postinstall"
+
+# Step 8: Build component packages
+echo "→ Building component packages..."
+pkgbuild --root "$PKG_CORE/payload" \
+         --scripts "$PKG_CORE/scripts" \
+         --identifier io.veyon.networkcontrol.core \
          --version "$VERSION" \
          --install-location / \
-         "$BUILD_DIR/$PKG_FILE_SERVER"
+         "$BUILD_DIR/NetworkControl-Core.pkg"
 
-# Step 16: Move server-only package to distribution
-echo "→ Moving server-only package to distribution directory..."
-mv "$BUILD_DIR/$PKG_FILE_SERVER" "$DIST_DIR/"
+pkgbuild --root "$PKG_MASTER/payload" \
+         --scripts "$PKG_MASTER/scripts" \
+         --identifier io.veyon.networkcontrol.master \
+         --version "$VERSION" \
+         --install-location / \
+         "$BUILD_DIR/NetworkControl-Master.pkg"
+
+pkgbuild --root "$PKG_SERVER/payload" \
+         --scripts "$PKG_SERVER/scripts" \
+         --identifier io.veyon.networkcontrol.server \
+         --version "$VERSION" \
+         --install-location / \
+         "$BUILD_DIR/NetworkControl-Server.pkg"
+
+pkgbuild --root "$PKG_CONFIGURATOR/payload" \
+         --scripts "$PKG_CONFIGURATOR/scripts" \
+         --identifier io.veyon.networkcontrol.configurator \
+         --version "$VERSION" \
+         --install-location / \
+         "$BUILD_DIR/NetworkControl-Configurator.pkg"
+
+# Step 9: Create distribution XML
+echo "→ Creating distribution definition..."
+cat > "$BUILD_DIR/distribution.xml" <<DISTRIBUTION
+<?xml version="1.0" encoding="utf-8"?>
+<installer-gui-script minSpecVersion="1">
+    <title>Veyon NetworkControl Plugin</title>
+    <organization>io.veyon.networkcontrol</organization>
+    <domains enable_localSystem="true"/>
+    <options customize="always" require-scripts="false" hostArchitectures="x86_64,arm64"/>
+
+    <welcome file="welcome.html" mime-type="text/html"/>
+
+    <choices-outline>
+        <line choice="core"/>
+        <line choice="master"/>
+        <line choice="server"/>
+        <line choice="configurator"/>
+    </choices-outline>
+
+    <choice id="core" title="Core Components" description="Required helper scripts and sudoers configuration (required)" enabled="false" selected="true" visible="true">
+        <pkg-ref id="io.veyon.networkcontrol.core"/>
+    </choice>
+
+    <choice id="master" title="Veyon Master" description="Install plugin for Veyon Master application" start_selected="true" start_enabled="true" start_visible="true">
+        <pkg-ref id="io.veyon.networkcontrol.master"/>
+    </choice>
+
+    <choice id="server" title="Veyon Server" description="Install plugin for Veyon Server application" start_selected="true" start_enabled="true" start_visible="true">
+        <pkg-ref id="io.veyon.networkcontrol.server"/>
+    </choice>
+
+    <choice id="configurator" title="Veyon Configurator" description="Install plugin for Veyon Configurator application (enables feature management in settings)" start_selected="true" start_enabled="true" start_visible="true">
+        <pkg-ref id="io.veyon.networkcontrol.configurator"/>
+    </choice>
+
+    <pkg-ref id="io.veyon.networkcontrol.core" version="$VERSION" onConclusion="none">NetworkControl-Core.pkg</pkg-ref>
+    <pkg-ref id="io.veyon.networkcontrol.master" version="$VERSION" onConclusion="none">NetworkControl-Master.pkg</pkg-ref>
+    <pkg-ref id="io.veyon.networkcontrol.server" version="$VERSION" onConclusion="none">NetworkControl-Server.pkg</pkg-ref>
+    <pkg-ref id="io.veyon.networkcontrol.configurator" version="$VERSION" onConclusion="none">NetworkControl-Configurator.pkg</pkg-ref>
+</installer-gui-script>
+DISTRIBUTION
+
+# Step 10: Create resources
+echo "→ Creating installer resources..."
+mkdir -p "$BUILD_DIR/resources"
+
+cat > "$BUILD_DIR/resources/welcome.html" <<'WELCOME'
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<style>
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+</style>
+</head>
+<body>
+<h1>Veyon NetworkControl Plugin</h1>
+<p>This installer will install the NetworkControl plugin for Veyon.</p>
+<p><strong>Features:</strong></p>
+<ul>
+<li>Enable/Disable internet access on student computers</li>
+<li>Keep local network functional while blocking internet</li>
+<li>Visual indicator when internet is disabled</li>
+</ul>
+<p>Select which Veyon applications should have the plugin installed in the next step.</p>
+</body>
+</html>
+WELCOME
+
+# Step 11: Build distribution package
+echo "→ Building distribution package..."
+PKG_FILE="VeyonNetworkControl-v${VERSION}.pkg"
+productbuild --distribution "$BUILD_DIR/distribution.xml" \
+             --resources "$BUILD_DIR/resources" \
+             --package-path "$BUILD_DIR" \
+             "$BUILD_DIR/$PKG_FILE"
+
+# Step 12: Move to distribution
+echo "→ Moving package to distribution directory..."
+mkdir -p "$DIST_DIR"
+mv "$BUILD_DIR/$PKG_FILE" "$DIST_DIR/"
 
 # Summary
 echo ""
@@ -179,16 +269,18 @@ echo ""
 echo "Build artifacts:"
 echo "  ${BUILD_DIR}/"
 echo ""
-echo "Distribution packages:"
+echo "Distribution package (with component selection):"
+echo "  ${DIST_DIR}/${PKG_FILE}"
+ls -lh "$DIST_DIR/$PKG_FILE" | awk '{print "  Size: " $5}'
+md5 "$DIST_DIR/$PKG_FILE" | sed 's/^/  /'
 echo ""
-echo "  1. Full package (master + server):"
-echo "     ${DIST_DIR}/${PKG_FILE}"
-ls -lh "$DIST_DIR/$PKG_FILE" | awk '{print "     Size: " $5}'
-md5 "$DIST_DIR/$PKG_FILE" | sed 's/^/     /'
+echo "Installation options:"
+echo "  ✓ Core Components (required) - helper script + sudoers"
+echo "  ☐ Veyon Master (optional) - selected by default"
+echo "  ☐ Veyon Server (optional) - selected by default"
+echo "  ☐ Veyon Configurator (optional) - selected by default"
 echo ""
-echo "  2. Server-only package:"
-echo "     ${DIST_DIR}/${PKG_FILE_SERVER}"
-ls -lh "$DIST_DIR/$PKG_FILE_SERVER" | awk '{print "     Size: " $5}'
-md5 "$DIST_DIR/$PKG_FILE_SERVER" | sed 's/^/     /'
+echo "The installer will present a customization screen where you can"
+echo "select which Veyon applications should have the plugin installed."
 echo ""
 echo "════════════════════════════════════════════════════════"
