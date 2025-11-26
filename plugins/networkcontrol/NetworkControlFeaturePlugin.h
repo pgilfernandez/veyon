@@ -82,6 +82,8 @@ public:
 
 	bool handleFeatureMessage( VeyonWorkerInterface& worker, const FeatureMessage& message ) override;
 
+	bool isFeatureActive( VeyonServerInterface& server, Feature::Uid featureUid ) const override;
+
 private:
 	bool confirmFeatureExecution( const Feature& feature, bool all, QWidget* parent );
 

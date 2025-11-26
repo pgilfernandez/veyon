@@ -127,6 +127,22 @@ bool NetworkControlFeaturePlugin::handleFeatureMessage( VeyonWorkerInterface& wo
 }
 
 
+bool NetworkControlFeaturePlugin::isFeatureActive( VeyonServerInterface& server, Feature::Uid featureUid ) const
+{
+	Q_UNUSED(server)
+
+	// The feature is considered active when internet is disabled
+	// The helper script creates /tmp/veyon-network-control-active when disabling internet
+	// and removes it when enabling internet
+	if( featureUid == m_disableNetworkFeature.uid() )
+	{
+		return QFile::exists( QStringLiteral("/tmp/veyon-network-control-active") );
+	}
+
+	return false;
+}
+
+
 bool NetworkControlFeaturePlugin::confirmFeatureExecution( const Feature& feature, bool all, QWidget* parent )
 {
 	if( VeyonCore::config().confirmUnsafeActions() == false )
