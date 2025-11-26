@@ -7,7 +7,7 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 VEYON_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 PLUGIN_NAME="networkcontrol"
-VERSION="2.0.0"
+VERSION="1.3.0"
 
 echo "════════════════════════════════════════════════════════"
 echo "  NetworkControl Plugin - Windows Cross-Compilation"

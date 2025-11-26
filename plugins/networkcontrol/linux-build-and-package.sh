@@ -9,7 +9,7 @@ VEYON_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 BUILD_DIR="$VEYON_ROOT/build_networkcontrol_linux"
 DIST_DIR="$VEYON_ROOT/veyon-linux-distribution"
 PLUGIN_NAME="networkcontrol"
-VERSION="2.0.0"
+VERSION="1.3.0"
 
 echo "════════════════════════════════════════════════════════"
 echo "  NetworkControl Plugin - Linux Build & Package v${VERSION}"

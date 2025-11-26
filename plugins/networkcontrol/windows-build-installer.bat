@@ -5,7 +5,7 @@ REM Requirements:
 REM   - NSIS 3.x installed (https://nsis.sourceforge.io/)
 REM   - networkcontrol.dll compiled and present in this directory
 REM
-REM This script will create: VeyonNetworkControl-2.0.0-win64-setup.exe
+REM This script will create: VeyonNetworkControl-1.3.0-win64-setup.exe
 
 echo ============================================================
 echo   NetworkControl Plugin - NSIS Installer Builder
@@ -79,17 +79,17 @@ echo ============================================================
 echo.
 
 REM Find the generated installer
-if exist "VeyonNetworkControl-2.0.0-win64-setup.exe" (
+if exist "VeyonNetworkControl-1.3.0-win64-setup.exe" (
     echo Installer created successfully:
-    echo   VeyonNetworkControl-2.0.0-win64-setup.exe
+    echo   VeyonNetworkControl-1.3.0-win64-setup.exe
     echo.
-    for %%A in ("VeyonNetworkControl-2.0.0-win64-setup.exe") do echo   Size: %%~zA bytes
+    for %%A in ("VeyonNetworkControl-1.3.0-win64-setup.exe") do echo   Size: %%~zA bytes
     echo.
     echo You can now distribute this installer to Windows machines.
     echo Users should run it as Administrator.
 ) else (
     echo WARNING: Installer file not found
-    echo Expected: VeyonNetworkControl-2.0.0-win64-setup.exe
+    echo Expected: VeyonNetworkControl-1.3.0-win64-setup.exe
 )
 
 echo.

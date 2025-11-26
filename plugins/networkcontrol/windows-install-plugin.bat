@@ -24,7 +24,7 @@ REM Set variables
 set VEYON_DIR=C:\Program Files\Veyon
 set PLUGIN_DIR=%VEYON_DIR%\plugins
 set PLUGIN_NAME=networkcontrol.dll
-set VERSION=2.0.0
+set VERSION=1.3.0
 
 REM Check if Veyon is installed
 if not exist "%VEYON_DIR%" (

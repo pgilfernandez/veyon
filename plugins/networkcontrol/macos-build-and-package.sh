@@ -8,7 +8,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BUILD_DIR="/Users/pablo/GitHub/veyon/build_networkcontrol"
 DIST_DIR="/Users/pablo/GitHub/veyon/veyon-macos-distribution"
 PLUGIN_NAME="networkcontrol"
-VERSION="2.0.0"
+VERSION="1.3.0"
 
 echo "════════════════════════════════════════════════════════"
 echo "  NetworkControl Plugin - Build & Package v${VERSION}"
