@@ -87,10 +87,11 @@ public:
 private:
 	bool confirmFeatureExecution( const Feature& feature, bool all, QWidget* parent );
 
-	void disableAllNetworkServices();
-	void enableAllNetworkServices();
+	bool disableAllNetworkServices();
+	bool enableAllNetworkServices();
 	QStringList getNetworkServices();
 	bool setNetworkServiceEnabled( const QString& serviceName, bool enabled );
+	void sendActiveFeaturesUpdate( VeyonServerInterface& server, const MessageContext& messageContext ) const;
 
 	const Feature m_disableNetworkFeature;
 	const Feature m_enableNetworkFeature;

@@ -9,7 +9,7 @@ VEYON_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 BUILD_DIR="$VEYON_ROOT/build_networkcontrol"
 DIST_DIR="$VEYON_ROOT/veyon-macos-distribution"
 PLUGIN_NAME="networkcontrol"
-VERSION="1.3.0"
+VERSION="2.1.0"
 
 echo "════════════════════════════════════════════════════════"
 echo "  NetworkControl Plugin - Build & Package v${VERSION}"
@@ -216,6 +216,42 @@ cat > "$BUILD_DIR/distribution.xml" <<DISTRIBUTION
 </installer-gui-script>
 DISTRIBUTION
 
+# Step 9b: Create distribution XML for users (core + server + configurator)
+echo "→ Creating users-only distribution definition..."
+cat > "$BUILD_DIR/distribution-users.xml" <<DISTRIBUTION_USERS
+<?xml version="1.0" encoding="utf-8"?>
+<installer-gui-script minSpecVersion="1">
+    <title>Veyon NetworkControl Plugin</title>
+    <organization>io.veyon.networkcontrol</organization>
+    <domains enable_localSystem="true"/>
+    <options customize="never" require-scripts="false" hostArchitectures="x86_64,arm64"/>
+
+    <welcome file="welcome.html" mime-type="text/html"/>
+
+    <choices-outline>
+        <line choice="core"/>
+        <line choice="server"/>
+        <line choice="configurator"/>
+    </choices-outline>
+
+    <choice id="core" title="Core Components" description="Required helper scripts and sudoers configuration (required)" enabled="false" selected="true" visible="true">
+        <pkg-ref id="io.veyon.networkcontrol.core"/>
+    </choice>
+
+    <choice id="server" title="Veyon Server" description="Install plugin for Veyon Server application" enabled="true" selected="true" visible="true">
+        <pkg-ref id="io.veyon.networkcontrol.server"/>
+    </choice>
+
+    <choice id="configurator" title="Veyon Configurator" description="Install plugin for Veyon Configurator application (enables feature management in settings)" enabled="true" selected="true" visible="true">
+        <pkg-ref id="io.veyon.networkcontrol.configurator"/>
+    </choice>
+
+    <pkg-ref id="io.veyon.networkcontrol.core" version="$VERSION" onConclusion="none">NetworkControl-Core.pkg</pkg-ref>
+    <pkg-ref id="io.veyon.networkcontrol.server" version="$VERSION" onConclusion="none">NetworkControl-Server.pkg</pkg-ref>
+    <pkg-ref id="io.veyon.networkcontrol.configurator" version="$VERSION" onConclusion="none">NetworkControl-Configurator.pkg</pkg-ref>
+</installer-gui-script>
+DISTRIBUTION_USERS
+
 # Step 10: Create resources
 echo "→ Creating installer resources..."
 mkdir -p "$BUILD_DIR/resources"
@@ -253,10 +289,19 @@ productbuild --distribution "$BUILD_DIR/distribution.xml" \
              --package-path "$BUILD_DIR" \
              "$BUILD_DIR/$PKG_FILE"
 
+# Step 11b: Build users-only distribution package
+echo "→ Building users-only distribution package..."
+PKG_FILE_USERS="VeyonNetworkControlForUsers-v${VERSION}.pkg"
+productbuild --distribution "$BUILD_DIR/distribution-users.xml" \
+             --resources "$BUILD_DIR/resources" \
+             --package-path "$BUILD_DIR" \
+             "$BUILD_DIR/$PKG_FILE_USERS"
+
 # Step 12: Move to distribution
 echo "→ Moving package to distribution directory..."
 mkdir -p "$DIST_DIR"
 mv "$BUILD_DIR/$PKG_FILE" "$DIST_DIR/"
+mv "$BUILD_DIR/$PKG_FILE_USERS" "$DIST_DIR/"
 
 # Summary
 echo ""
@@ -274,6 +319,11 @@ echo "Distribution package (with component selection):"
 echo "  ${DIST_DIR}/${PKG_FILE}"
 ls -lh "$DIST_DIR/$PKG_FILE" | awk '{print "  Size: " $5}'
 md5 "$DIST_DIR/$PKG_FILE" | sed 's/^/  /'
+echo ""
+echo "Users-only distribution package (server + configurator):"
+echo "  ${DIST_DIR}/${PKG_FILE_USERS}"
+ls -lh "$DIST_DIR/$PKG_FILE_USERS" | awk '{print "  Size: " $5}'
+md5 "$DIST_DIR/$PKG_FILE_USERS" | sed 's/^/  /'
 echo ""
 echo "Installation options:"
 echo "  ✓ Core Components (required) - helper script + sudoers"

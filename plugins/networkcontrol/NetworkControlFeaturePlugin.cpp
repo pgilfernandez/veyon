@@ -28,9 +28,12 @@
 #include <QTextStream>
 
 #include "ComputerControlInterface.h"
+#include "FeatureManager.h"
+#include "MonitoringMode.h"
 #include "NetworkControlFeaturePlugin.h"
 #include "PlatformCoreFunctions.h"
 #include "VeyonConfiguration.h"
+#include "VeyonCore.h"
 #include "VeyonMasterInterface.h"
 #include "VeyonServerInterface.h"
 
@@ -74,7 +77,7 @@ bool NetworkControlFeaturePlugin::controlFeature( Feature::Uid featureUid,
 		return false;
 	}
 
-	sendFeatureMessage( FeatureMessage{ featureUid, FeatureMessage::DefaultCommand }, computerControlInterfaces );
+	sendFeatureMessage( FeatureMessage{ featureUid, FeatureMessage::Command::Default }, computerControlInterfaces );
 
 	return true;
 }
@@ -105,11 +108,13 @@ bool NetworkControlFeaturePlugin::handleFeatureMessage( VeyonServerInterface& se
 	if( message.featureUid() == m_disableNetworkFeature.uid() )
 	{
 		disableAllNetworkServices();
+		sendActiveFeaturesUpdate(server, messageContext);
 		return true;
 	}
 	else if( message.featureUid() == m_enableNetworkFeature.uid() )
 	{
 		enableAllNetworkServices();
+		sendActiveFeaturesUpdate(server, messageContext);
 		return true;
 	}
 
@@ -171,7 +176,7 @@ bool NetworkControlFeaturePlugin::confirmFeatureExecution( const Feature& featur
 }
 
 
-void NetworkControlFeaturePlugin::disableAllNetworkServices()
+bool NetworkControlFeaturePlugin::disableAllNetworkServices()
 {
 	// Use helper script via sudo (configured in sudoers.d for no password)
 	vInfo() << "Disabling internet access via helper script...";
@@ -183,7 +188,7 @@ void NetworkControlFeaturePlugin::disableAllNetworkServices()
 	if( !helperProcess.waitForFinished(10000) )
 	{
 		vWarning() << "Helper script timeout";
-		return;
+		return false;
 	}
 
 	const auto output = QString::fromUtf8( helperProcess.readAllStandardOutput() );
@@ -198,15 +203,18 @@ void NetworkControlFeaturePlugin::disableAllNetworkServices()
 	if( helperProcess.exitCode() == 0 )
 	{
 		vInfo() << "Internet access blocked successfully";
+		return true;
 	}
 	else
 	{
 		vWarning() << "Failed to block internet - exit code:" << helperProcess.exitCode();
 	}
+
+	return false;
 }
 
 
-void NetworkControlFeaturePlugin::enableAllNetworkServices()
+bool NetworkControlFeaturePlugin::enableAllNetworkServices()
 {
 	// Use helper script via sudo (configured in sudoers.d for no password)
 	vInfo() << "Enabling internet access via helper script...";
@@ -218,7 +226,7 @@ void NetworkControlFeaturePlugin::enableAllNetworkServices()
 	if( !helperProcess.waitForFinished(10000) )
 	{
 		vWarning() << "Helper script timeout";
-		return;
+		return false;
 	}
 
 	const auto output = QString::fromUtf8( helperProcess.readAllStandardOutput() );
@@ -233,11 +241,14 @@ void NetworkControlFeaturePlugin::enableAllNetworkServices()
 	if( helperProcess.exitCode() == 0 )
 	{
 		vInfo() << "Internet access restored successfully";
+		return true;
 	}
 	else
 	{
 		vWarning() << "Failed to restore internet - exit code:" << helperProcess.exitCode();
 	}
+
+	return false;
 }
 
 
@@ -255,4 +266,24 @@ bool NetworkControlFeaturePlugin::setNetworkServiceEnabled( const QString& servi
 
 	// Esta función ya no es necesaria en la implementación basada en rutas
 	return true;
+}
+
+
+void NetworkControlFeaturePlugin::sendActiveFeaturesUpdate( VeyonServerInterface& server,
+															const MessageContext& messageContext ) const
+{
+	const auto activeFeaturesUids = VeyonCore::featureManager().activeFeatures( server );
+	QStringList activeFeatures;
+	activeFeatures.reserve( activeFeaturesUids.size() );
+
+	for( const auto& activeFeatureUid : activeFeaturesUids )
+	{
+		activeFeatures.append( activeFeatureUid.toString() );
+	}
+
+	static const Feature::Uid queryActiveFeaturesUid{ QStringLiteral( "a0a96fba-425d-414a-aaf4-352b76d7c4f3" ) };
+
+	server.sendFeatureMessageReply( messageContext,
+									FeatureMessage{ queryActiveFeaturesUid }
+										.addArgument( MonitoringMode::Argument::ActiveFeaturesList, activeFeatures ) );
 }
