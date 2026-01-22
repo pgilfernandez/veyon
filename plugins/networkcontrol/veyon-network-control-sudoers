@@ -1,0 +1,13 @@
+# Veyon Network Control - Sudoers Configuration
+# This file allows veyon-server to control network routes without password prompts
+#
+# Installation:
+#   sudo cp veyon-network-control-sudoers /etc/sudoers.d/veyon-network-control
+#   sudo chmod 440 /etc/sudoers.d/veyon-network-control
+#   sudo chown root:wheel /etc/sudoers.d/veyon-network-control
+#
+# This allows ALL users to run the veyon-network-helper script without password
+# Only the specific script is allowed, not arbitrary commands
+
+ALL ALL=(root) NOPASSWD: /usr/local/bin/veyon-network-helper disable
+ALL ALL=(root) NOPASSWD: /usr/local/bin/veyon-network-helper enable

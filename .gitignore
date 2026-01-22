@@ -9,19 +9,28 @@ build/
 build-macvnc/
 dist/
 translations/
+build_networkcontrol_*/
 
 # Packaging output (regenerable con build-and-package.sh)
 veyon-macos-package/
 veyon-macos-distribution/
+veyon-*-distribution/
 dmg-temp/
 
 # Qt/CMake
+svg
 Makefile
 *.user
 *.autosave
 moc_*.cpp
 ui_*.h
 qrc_*.cpp
+.qmake.stash
+moc_predefs.h
+*.o
+*.dylib
+*.so
+*.dll
 
 # Plugins
 plugins/addons
@@ -31,9 +40,6 @@ plugins/extra
 result
 result-*
 .direnv
-
-# SVG
-svg
 
 # IDE
 .vscode/
