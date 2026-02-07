@@ -171,24 +171,22 @@ bool TextMessageFeaturePlugin::handleFeatureMessage( VeyonWorkerInterface& worke
 		qDebug() << "Creating message box with text:" << message.argument( Argument::Text ).toString();
 
 		const auto messageText = makeLargeFontHtml( message.argument( Argument::Text ).toString() );
-		QMessageBox messageBox( static_cast<QMessageBox::Icon>( message.argument( Argument::Icon ).toInt() ),
+		auto* messageBox = new QMessageBox( static_cast<QMessageBox::Icon>( message.argument( Argument::Icon ).toInt() ),
 								tr( "Message from teacher" ),
 								QString() );
-		messageBox.setTextFormat( Qt::RichText );
-		messageBox.setTextInteractionFlags( Qt::TextBrowserInteraction | Qt::TextSelectableByKeyboard );
-		messageBox.setText( messageText );
+		messageBox->setAttribute( Qt::WA_DeleteOnClose, true );
+		messageBox->setTextFormat( Qt::RichText );
+		messageBox->setTextInteractionFlags( Qt::TextSelectableByMouse | Qt::LinksAccessibleByMouse );
+		messageBox->setText( messageText );
 
 		qDebug() << "Showing message box...";
-		messageBox.show();
+		messageBox->show();
 
 		qDebug() << "Calling raiseWindow...";
 		// Ensure the window is brought to the front on all platforms, especially macOS
-		VeyonCore::platform().coreFunctions().raiseWindow( &messageBox, true );
+		VeyonCore::platform().coreFunctions().raiseWindow( messageBox, true );
 
-		qDebug() << "Executing message box (modal)...";
-		messageBox.exec();
-
-		qDebug() << "Message box closed";
+		qDebug() << "Message box shown";
 
 		return true;
 	}
